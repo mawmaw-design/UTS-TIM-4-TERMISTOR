@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Termistor god damn presentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #111827; /* Gray-900 */
+        color: #d1d5db; /* Gray-300 */
+        overflow: hidden;
+      }
+      .slide {
+        display: none;
+        opacity: 0;
+        transition: opacity 0.7s ease-in-out;
+        min-height: calc(100vh - 100px);
+      }
+      .slide.active {
+        display: flex;
+        opacity: 1;
+      }
+      .title-shadow {
+        text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+      }
+      .card {
+        background-color: rgba(
+          31,
+          41,
+          55,
+          0.7
+        ); /* Gray-800 with transparency */
+        border: 1px solid #4b5563; /* Gray-600 */
+        backdrop-filter: blur(10px);
+      }
+      .nav-dot {
+        transition: all 0.3s ease;
+      }
+      .nav-dot.active {
+        background-color: #3b82f6; /* Blue-500 */
+        transform: scale(1.5);
+      }
+      .btn-nav {
+        background-color: #374151; /* Gray-700 */
+        transition: all 0.3s ease;
+      }
+      .btn-nav:hover {
+        background-color: #4b5563; /* Gray-600 */
+        transform: translateY(-2px);
+      }
+      .table-futuristic {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      .table-futuristic th,
+      .table-futuristic td {
+        border: 1px solid #4b5563;
+        padding: 12px;
+        text-align: left;
+      }
+      .table-futuristic th {
+        background-color: #1f2937; /* Gray-800 */
+        font-weight: bold;
+      }
+
+      /* --- Animasi Latar Belakang EKG --- */
+      #ekg-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -10;
+        opacity: 0.15;
+      }
+      .ekg-rect {
+        animation: scroll-ekg 3s linear infinite;
+      }
+      @keyframes scroll-ekg {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-200px);
+        }
+      }
+
+      /* --- Animasi Slide 1 --- */
+      #main-title {
+        min-height: 90px;
+      }
+      .name-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+        top: 0;
+        z-index: 0;
+      }
+      @keyframes fall-down {
+        0% {
+          transform: translateY(-200px);
+          opacity: 0;
+        }
+        80% {
+          transform: translateY(10px);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      .animate-fall {
+        animation: fall-down 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045)
+          forwards;
+      }
+      @keyframes draw-crack {
+        to {
+          stroke-dashoffset: 0;
+          opacity: 1;
+        }
+      }
+      #crack-svg.animate-crack path {
+        stroke-dasharray: 150;
+        stroke-dashoffset: 150;
+        animation: draw-crack 0.5s linear forwards;
+      }
+      @keyframes glitch-anim {
+        0% {
+          transform: translate(0);
+        }
+        20% {
+          transform: translate(-3px, 3px);
+        }
+        40% {
+          transform: translate(-3px, -3px);
+        }
+        60% {
+          transform: translate(3px, 3px);
+        }
+        80% {
+          transform: translate(3px, -3px);
+        }
+        to {
+          transform: translate(0);
+        }
+      }
+      .glitch {
+        position: relative;
+        animation: glitch-anim 0.2s infinite linear alternate-reverse;
+      }
+      .glitch::before,
+      .glitch::after {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #111827;
+      }
+      .glitch::before {
+        left: 3px;
+        text-shadow: -2px 0 #ff00c1;
+        clip-path: rect(24px, 550px, 90px, 0);
+        animation: glitch-anim 0.3s infinite linear alternate-reverse;
+      }
+      .glitch::after {
+        left: -3px;
+        text-shadow: -2px 0 #00fff9, 2px 2px #ff00c1;
+        clip-path: rect(85px, 550px, 140px, 0);
+        animation: glitch-anim 0.1s infinite linear alternate-reverse;
+      }
+      @keyframes fade-in-side {
+        from {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      .animate-fade-in {
+        animation: fade-in-side 0.5s ease-out forwards;
+      }
+      @keyframes grow-to-final-size {
+        from {
+          font-size: 0.875rem;
+          line-height: 1.25rem;
+          font-weight: 400;
+        }
+        to {
+          font-size: 4.25rem;
+          line-height: 1;
+          font-weight: 900;
+        }
+      }
+      .animate-grow {
+        animation: grow-to-final-size 1.2s ease-in-out forwards;
+      }
+      @keyframes lightning-glow {
+        0%,
+        100% {
+          color: #fef9c3;
+          text-shadow: 0 0 8px rgba(250, 204, 21, 0.8),
+            0 0 16px rgba(250, 204, 21, 0.6), 0 0 24px rgba(234, 179, 8, 0.4);
+        }
+        50% {
+          color: #fef08a;
+          text-shadow: 0 0 16px rgba(250, 204, 21, 1),
+            0 0 32px rgba(250, 204, 21, 0.8), 0 0 48px rgba(234, 179, 8, 0.6);
+        }
+      }
+      .lightning-text {
+        animation: lightning-glow 2.5s ease-in-out infinite;
+      }
+
+      /* --- Variasi Animasi Konten (DIPERBARUI) --- */
+      .anim-title,
+      .anim-subtitle,
+      .anim-content {
+        opacity: 0;
+      }
+      @keyframes emerge {
+        from {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      .slide.active .anim-title {
+        animation: emerge 0.7s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
+        animation-delay: var(--delay, 0s);
+      }
+
+      @keyframes typing {
+        from {
+          width: 0;
+        }
+        to {
+          width: 100%;
+        }
+      }
+      @keyframes blink-caret {
+        from,
+        to {
+          border-color: transparent;
+        }
+        50% {
+          border-color: #3b82f6;
+        }
+      }
+      .anim-subtitle-wrapper {
+        display: inline-block;
+      }
+      .anim-subtitle {
+        overflow: hidden;
+        white-space: nowrap;
+        border-right: 0.15em solid #3b82f6;
+        width: 0;
+        opacity: 1;
+      }
+      .slide.active .anim-subtitle {
+        animation: typing 1.5s steps(30, end) forwards,
+          blink-caret 0.75s step-end infinite;
+        animation-delay: var(--delay, 0s);
+      }
+      .slide.active .anim-subtitle.animation-end {
+        border-right-color: transparent;
+        animation: typing 1.5s steps(30, end) forwards;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .slide.active .anim-content {
+        animation: fadeIn 0.8s ease-out forwards;
+        animation-delay: var(--delay, 0s);
+      }
+
+      /* --- Tooltip CSS --- */
+      .tooltip-container {
+        position: relative;
+        display: inline-block;
+        border-bottom: 1px dotted #6b7280;
+        cursor: help;
+      }
+      .tooltip-text {
+        visibility: hidden;
+        width: 220px;
+        background-color: #1f2937;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 8px;
+        position: absolute;
+        z-index: 10;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -110px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        font-weight: normal;
+      }
+      .tooltip-text::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #1f2937 transparent transparent transparent;
+      }
+      .tooltip-container:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body class="flex flex-col items-center justify-center min-h-screen">
+    <!-- Latar Belakang EKG -->
+    <div id="ekg-background">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+        <defs>
+          <pattern
+            id="ekgPattern"
+            x="0"
+            y="0"
+            width="200"
+            height="100"
+            patternUnits="userSpaceOnUse"
+          >
+            <path
+              d="M0,50 H70 L75,40 L80,60 L85,45 L90,50 H200"
+              stroke="#22c55e"
+              stroke-width="1.5"
+              fill="none"
+            />
+          </pattern>
+        </defs>
+        <rect
+          x="0"
+          y="0"
+          width="200%"
+          height="100%"
+          fill="url(#ekgPattern)"
+          class="ekg-rect"
+        ></rect>
+      </svg>
+    </div>
+
+    <main
+      id="presentation-container"
+      class="w-full max-w-7xl mx-auto relative z-10"
+    >
+      <!-- Slide 1: Judul -->
+      <section
+        class="slide active flex-col justify-center items-center text-center"
+        data-slide="0"
+      >
+        <div
+          class="relative w-full flex justify-center items-center px-4"
+          style="min-height: 400px"
+        >
+          <div
+            id="name-container-left"
+            class="name-container absolute left-8 text-left text-sm text-gray-500 opacity-0"
+          ></div>
+          <div class="z-10">
+            <h1
+              id="main-title"
+              class="text-5xl md:text-7xl font-black uppercase title-shadow text-white tracking-widest"
+              data-value="TERMISTOR"
+            ></h1>
+            <div id="subtitle-container" class="relative mt-12 opacity-0">
+              <p class="text-xl md:text-2xl text-gray-400">
+                Analisa Mendalam Tentang Resistor Peka Termal
+              </p>
+              <svg
+                id="crack-svg"
+                class="absolute top-full left-1/2 -translate-x-1/2 w-48 h-auto opacity-0"
+                viewBox="0 0 100 20"
+              >
+                <path
+                  d="M 0,10 L 20,12 L 30,8 L 45,15 L 50,5 L 55,15 L 70,8 L 80,12 L 100,10"
+                  stroke="#4b5563"
+                  stroke-width="1"
+                  fill="none"
+                />
+              </svg>
+            </div>
+          </div>
+          <div
+            id="name-container-right"
+            class="name-container absolute right-8 text-right text-sm text-gray-500 opacity-0"
+          ></div>
+        </div>
+      </section>
+
+      <!-- Slide 2: Pendahuluan -->
+      <section class="slide flex-col justify-center" data-slide="1">
+        <div class="max-w-5xl mx-auto px-4">
+          <h2
+            class="text-4xl font-bold title-shadow text-white mb-6 anim-title"
+          >
+            Pendahuluan
+          </h2>
+          <div class="card p-6 rounded-lg anim-content" style="--delay: 200ms">
+            <div class="anim-subtitle-wrapper">
+              <h3
+                class="text-2xl font-bold text-blue-400 mb-3 anim-subtitle"
+                style="--delay: 400ms"
+              >
+                Definisi & Signifikansi
+              </h3>
+            </div>
+            <p class="text-lg anim-content" style="--delay: 600ms">
+              Termistor (<i>Thermally Sensitive Resistor</i>) adalah komponen
+              elektronika yang nilai resistansinya sangat bergantung pada
+              perubahan suhu. Karakteristik ini menjadikannya sensor vital untuk
+              aplikasi pengukuran dan kontrol suhu.
+            </p>
+            <hr
+              class="my-4 border-gray-600 anim-content"
+              style="--delay: 700ms"
+            />
+            <div class="anim-subtitle-wrapper">
+              <h3
+                class="text-2xl font-bold text-blue-400 mb-3 anim-subtitle"
+                style="--delay: 800ms"
+              >
+                Latar Belakang
+              </h3>
+            </div>
+            <p class="text-lg anim-content" style="--delay: 1000ms">
+              Konsepnya pertama kali diamati oleh
+              <strong>Michael Faraday pada tahun 1833</strong> saat meneliti
+              sulfida perak, yang menjadi fondasi pengembangan termistor modern.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 3: Konsep Dasar -->
+      <section class="slide flex-col justify-center" data-slide="2">
+        <div class="max-w-5xl mx-auto px-4">
+          <h2
+            class="text-4xl font-bold title-shadow text-white mb-6 anim-title"
+          >
+            Konsep Dasar & Prinsip Kerja
+          </h2>
+          <div class="card p-6 rounded-lg anim-content" style="--delay: 200ms">
+            <p class="mb-4 text-lg anim-content" style="--delay: 400ms">
+              Prinsip kerja termistor berakar pada sifat unik material
+              semikonduktornya. Peningkatan suhu menyebabkan lebih banyak
+              pembawa muatan (elektron dan <i>hole</i>) tersedia untuk konduksi,
+              yang secara signifikan mengubah nilai resistansi material.
+            </p>
+            <ul class="list-disc list-inside space-y-3 text-lg">
+              <li class="anim-content" style="--delay: 600ms">
+                <strong>Material:</strong> Umumnya terbuat dari oksida logam
+                seperti mangan, nikel, dan kobalt.
+              </li>
+              <li class="anim-content" style="--delay: 700ms">
+                <strong>Sensitivitas Tinggi:</strong> Mampu mendeteksi perubahan
+                suhu terkecil, hingga 10% perubahan resistansi per °C.
+              </li>
+              <li class="anim-content" style="--delay: 800ms">
+                <strong>Respons Cepat:</strong> Waktu respons seringkali hanya
+                dalam hitungan detik.
+              </li>
+              <li class="anim-content" style="--delay: 900ms">
+                <strong>Non-linearitas:</strong> Hubungan antara resistansi dan
+                suhu bersifat non-linier (eksponensial), memerlukan perhitungan
+                khusus untuk akurasi tinggi.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 4: Jenis-jenis Termistor -->
+      <section
+        class="slide flex-col justify-center items-center"
+        data-slide="3"
+      >
+        <div class="max-w-5xl mx-auto px-4 w-full">
+          <h2
+            class="text-4xl font-bold title-shadow text-white mb-8 anim-title"
+          >
+            Jenis-jenis Termistor
+          </h2>
+          <div class="grid md:grid-cols-2 gap-8 w-full">
+            <div
+              class="card p-6 rounded-lg text-center anim-content"
+              style="--delay: 200ms"
+            >
+              <h3 class="text-3xl font-bold text-green-400">NTC</h3>
+              <p class="text-xl mt-2">(Negative Temperature Coefficient)</p>
+              <hr class="my-4 border-gray-600" />
+              <p class="text-lg">
+                Resistansi <strong>menurun</strong> saat suhu
+                <strong>meningkat</strong>. Paling umum digunakan untuk
+                pengukuran suhu.
+              </p>
+            </div>
+            <div
+              class="card p-6 rounded-lg text-center anim-content"
+              style="--delay: 400ms"
+            >
+              <h3 class="text-3xl font-bold text-red-400">PTC</h3>
+              <p class="text-xl mt-2">(Positive Temperature Coefficient)</p>
+              <hr class="my-4 border-gray-600" />
+              <p class="text-lg">
+                Resistansi <strong>meningkat</strong> saat suhu
+                <strong>meningkat</strong>. Umumnya digunakan untuk proteksi
+                sirkuit.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 5: Perbandingan NTC vs PTC -->
+      <section class="slide flex-col justify-center" data-slide="4">
+        <div class="max-w-5xl mx-auto px-4 w-full">
+          <h2
+            class="text-4xl font-bold title-shadow text-white mb-6 anim-title"
+          >
+            Perbandingan NTC vs. PTC
+          </h2>
+          <div
+            class="card p-4 rounded-lg overflow-x-auto anim-content"
+            style="--delay: 200ms"
+          >
+            <table class="table-futuristic text-sm md:text-base">
+              <thead>
+                <tr>
+                  <th class="anim-content" style="--delay: 400ms">
+                    Parameter Kunci
+                  </th>
+                  <th
+                    class="text-green-400 anim-content"
+                    style="--delay: 450ms"
+                  >
+                    Termistor NTC
+                  </th>
+                  <th class="text-red-400 anim-content" style="--delay: 500ms">
+                    Termistor PTC
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="anim-content" style="--delay: 600ms">
+                  <td>Perilaku R vs. T</td>
+                  <td>Resistansi menurun saat suhu naik</td>
+                  <td>Resistansi meningkat saat suhu naik</td>
+                </tr>
+                <tr class="anim-content" style="--delay: 700ms">
+                  <td>Linearitas</td>
+                  <td>Sangat non-linier (eksponensial)</td>
+                  <td>Relatif linier (silikon) atau non-linier (keramik)</td>
+                </tr>
+                <tr class="anim-content" style="--delay: 800ms">
+                  <td>Sensitivitas</td>
+                  <td>Sangat tinggi, terutama pada suhu rendah</td>
+                  <td>
+                    Konstan (silikon) atau tajam pada titik Curie (keramik)
+                  </td>
+                </tr>
+                <tr class="anim-content" style="--delay: 900ms">
+                  <td>Aplikasi Utama</td>
+                  <td>Pengukuran suhu presisi, pembatas arus</td>
+                  <td>Proteksi arus lebih, sakelar termal, pemanas</td>
+                </tr>
+                <tr class="anim-content" style="--delay: 1000ms">
+                  <td>Material Umum</td>
+                  <td>Oksida logam (mangan, nikel, kobalt)</td>
+                  <td>Barium titanat, silikon, polimer+karbon</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 6: Perhitungan & Rumus -->
+      <section class="slide flex-col justify-center" data-slide="5">
+        <div class="max-w-5xl mx-auto px-4">
+          <h2
+            class="text-4xl font-bold title-shadow text-white mb-6 anim-title"
+          >
+            Perhitungan & Rumus Kunci
+          </h2>
+          <div class="card p-6 rounded-lg anim-content" style="--delay: 200ms">
+            <div class="anim-subtitle-wrapper">
+              <h3
+                class="text-2xl font-bold text-blue-400 mb-3 anim-subtitle"
+                style="--delay: 400ms"
+              >
+                Persamaan Steinhart-Hart
+              </h3>
+            </div>
+            <p class="mb-4 anim-content" style="--delay: 600ms">
+              Model paling akurat untuk mengkarakterisasi hubungan
+              resistansi-suhu (R-T) pada termistor NTC, memberikan presisi
+              tinggi.
+            </p>
+            <div
+              class="bg-gray-900 p-4 rounded-md text-center anim-content"
+              style="--delay: 700ms"
+            >
+              <code class="text-lg text-yellow-300"
+                >1/T = A + B(ln R) + C(ln R)³</code
+              >
+            </div>
+            <ul
+              class="list-none text-sm mt-3 space-y-1 text-gray-400 anim-content"
+              style="--delay: 800ms"
+            >
+              <li><strong>T:</strong> Suhu absolut (Kelvin)</li>
+              <li><strong>R:</strong> Resistansi (Ohm)</li>
+              <li>
+                <strong>A, B, C:</strong> Konstanta Steinhart-Hart (spesifik
+                untuk setiap termistor)
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 7: Studi Kasus NTC -->
+      <section class="slide flex-col justify-center" data-slide="6">
+        <div class="max-w-5xl mx-auto px-4">
+          <h2
+            class="text-4xl font-bold title-shadow text-white mb-6 anim-title"
+          >
+            Studi Kasus: Perhitungan Suhu NTC
+          </h2>
+          <div class="card p-6 rounded-lg anim-content" style="--delay: 200ms">
+            <p class="mb-4 text-lg anim-content" style="--delay: 400ms">
+              Mari hitung suhu dari sebuah NTC dengan konstanta berikut:
+            </p>
+            <div
+              class="bg-gray-900 p-4 rounded-md text-center mb-4 overflow-x-auto anim-content"
+              style="--delay: 500ms"
+            >
+              <code class="text-lg text-yellow-300 whitespace-nowrap">
+                1/<span class="tooltip-container"
+                  >T<span class="tooltip-text"
+                    >Suhu dalam Kelvin (K) yang ingin kita cari.</span
+                  ></span
+                >
+                =
+                <span class="tooltip-container"
+                  >A<span class="tooltip-text"
+                    >Konstanta A = 0.001129148. Didapat dari kalibrasi
+                    pabrikan.</span
+                  ></span
+                >
+                +
+                <span class="tooltip-container"
+                  >B<span class="tooltip-text"
+                    >Konstanta B = 0.000234125. Didapat dari kalibrasi
+                    pabrikan.</span
+                  ></span
+                >(ln<span class="tooltip-container"
+                  >R<span class="tooltip-text"
+                    >Nilai resistansi terukur dari termistor dalam Ohm
+                    (Ω).</span
+                  ></span
+                >) +
+                <span class="tooltip-container"
+                  >C<span class="tooltip-text"
+                    >Konstanta C = 0.0000000876741. Didapat dari kalibrasi
+                    pabrikan.</span
+                  ></span
+                >(ln<span class="tooltip-container"
+                  >R<span class="tooltip-text"
+                    >Nilai resistansi terukur dari termistor dalam Ohm
+                    (Ω).</span
+                  ></span
+                >)³
+              </code>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6 text-sm">
+              <div class="anim-content" style="--delay: 600ms">
+                <h3 class="font-bold text-blue-400">Kasus 1: Suhu Rendah</h3>
+                <p>
+                  Resistansi terukur (<span class="font-bold text-yellow-300"
+                    >R</span
+                  >) = 32,770 Ω
+                </p>
+                <p>1. Hitung ln(R): ln(32770) ≈ 10.4</p>
+                <p>2. Hitung 1/T = A + B(10.4) + C(10.4)³ ≈ 0.00354 K⁻¹</p>
+                <p>3. Hitung T = 1 / 0.00354 ≈ 282.48 K</p>
+                <p class="font-bold mt-2">
+                  Hasil: 282.48 K - 273.15 =
+                  <span class="text-xl text-green-400">9.33 °C</span>
+                </p>
+              </div>
+              <div class="anim-content" style="--delay: 700ms">
+                <h3 class="font-bold text-blue-400">Kasus 2: Suhu Tinggi</h3>
+                <p>
+                  Resistansi terukur (<span class="font-bold text-yellow-300"
+                    >R</span
+                  >) = 1,355 Ω
+                </p>
+                <p>1. Hitung ln(R): ln(1355) ≈ 7.21</p>
+                <p>2. Hitung 1/T = A + B(7.21) + C(7.21)³ ≈ 0.00285 K⁻¹</p>
+                <p>3. Hitung T = 1 / 0.00285 ≈ 350.87 K</p>
+                <p class="font-bold mt-2">
+                  Hasil: 350.87 K - 273.15 =
+                  <span class="text-xl text-red-400">77.72 °C</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 8: Konsep Kunci PTC -->
+      <section class="slide flex-col justify-center" data-slide="7">
+        <div class="max-w-5xl mx-auto px-4">
+          <h2
+            class="text-4xl font-bold title-shadow text-white mb-6 anim-title"
+          >
+            Konsep Kunci: PTC & Titik Curie
+          </h2>
+          <div class="card p-6 rounded-lg anim-content" style="--delay: 200ms">
+            <p class="mb-4 text-lg anim-content" style="--delay: 400ms">
+              Berbeda dengan NTC, PTC jarang digunakan untuk pengukuran suhu
+              presisi. Fungsi utamanya adalah sebagai
+              <strong>sakelar termal</strong> yang dapat direset.
+            </p>
+            <div class="grid md:grid-cols-2 gap-6 items-center">
+              <div class="anim-content" style="--delay: 500ms">
+                <h3 class="font-bold text-red-400 text-xl mb-2">
+                  Titik Curie (Suhu Switching)
+                </h3>
+                <p>
+                  Ini adalah suhu kritis di mana resistansi PTC meningkat secara
+                  drastis (ribuan kali lipat). Perilaku ini digunakan untuk
+                  proteksi.
+                </p>
+                <h3 class="font-bold text-red-400 text-xl mt-4 mb-2">
+                  Studi Kasus: Proteksi Motor
+                </h3>
+                <p>
+                  Sebuah PTC dipasang seri dengan motor. Jika motor terlalu
+                  panas dan mencapai Titik Curie PTC (misal 120°C), resistansi
+                  PTC akan melonjak tinggi, membatasi arus ke motor dan mencegah
+                  kerusakan akibat overheat.
+                </p>
+              </div>
+              <div class="anim-content" style="--delay: 600ms">
+                <div class="bg-gray-900 p-4 rounded-lg text-center">
+                  <p class="font-bold text-white mb-2">
+                    Grafik Konseptual R vs. T untuk PTC
+                  </p>
+                  <svg class="w-full" viewBox="0 0 100 60">
+                    <path
+                      d="M 5 50 L 50 45 L 51 44 L 52 42 L 53 35 L 54 20 L 55 5 L 95 5"
+                      stroke="#f87171"
+                      stroke-width="2"
+                      fill="none"
+                    />
+                    <path
+                      d="M 5 55 L 95 55"
+                      stroke="#6b7280"
+                      stroke-width="0.5"
+                      fill="none"
+                    />
+                    <path
+                      d="M 5 5 L 5 55"
+                      stroke="#6b7280"
+                      stroke-width="0.5"
+                      fill="none"
+                    />
+                    <text
+                      x="53"
+                      y="58"
+                      font-size="4"
+                      fill="#d1d5db"
+                      text-anchor="middle"
+                    >
+                      T Curie
+                    </text>
+                    <path
+                      d="M 53 55 L 53 5"
+                      stroke="#6b7280"
+                      stroke-width="0.5"
+                      stroke-dasharray="2"
+                      fill="none"
+                    />
+                    <text x="0" y="8" font-size="4" fill="#d1d5db">R (Ω)</text>
+                    <text x="90" y="59" font-size="4" fill="#d1d5db">
+                      T (°C)
+                    </text>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 9: Aplikasi Termistor -->
+      <section class="slide flex-col justify-center" data-slide="8">
+        <div class="max-w-5xl mx-auto px-4">
+          <h2
+            class="text-4xl font-bold title-shadow text-white mb-8 anim-title"
+          >
+            Aplikasi Termistor
+          </h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-6 text-center">
+            <div
+              class="card p-4 rounded-lg anim-content"
+              style="--delay: 200ms"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-12 w-12 mx-auto text-blue-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7.C14 5 16.09 5.777 17.657 7.343A8 8 0 0117.657 18.657z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9.879 16.121A3 3 0 1014.12 11.88l-4.242 4.242z"
+                />
+              </svg>
+              <p class="mt-2 font-bold">Pengukuran Suhu Presisi</p>
+              <p class="text-sm text-gray-400">
+                Termometer digital, peralatan medis.
+              </p>
+            </div>
+            <div
+              class="card p-4 rounded-lg anim-content"
+              style="--delay: 300ms"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-12 w-12 mx-auto text-red-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                />
+              </svg>
+              <p class="mt-2 font-bold">Proteksi Sirkuit (PTC)</p>
+              <p class="text-sm text-gray-400">
+                Melindungi dari arus berlebih.
+              </p>
+            </div>
+            <div
+              class="card p-4 rounded-lg anim-content"
+              style="--delay: 400ms"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-12 w-12 mx-auto text-green-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
+              </svg>
+              <p class="mt-2 font-bold">Pembatas Arus (NTC)</p>
+              <p class="text-sm text-gray-400">Membatasi lonjakan arus awal.</p>
+            </div>
+            <div
+              class="card p-4 rounded-lg anim-content"
+              style="--delay: 500ms"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-12 w-12 mx-auto text-yellow-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                />
+              </svg>
+              <p class="mt-2 font-bold">Peralatan Rumah Tangga</p>
+              <p class="text-sm text-gray-400">AC, pemanas air, kulkas.</p>
+            </div>
+            <div
+              class="card p-4 rounded-lg anim-content"
+              style="--delay: 600ms"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-12 w-12 mx-auto text-purple-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10l2-2h8z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 8h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1.586"
+                />
+              </svg>
+              <p class="mt-2 font-bold">Otomotif & Industri</p>
+              <p class="text-sm text-gray-400">
+                Manajemen suhu mesin dan baterai.
+              </p>
+            </div>
+            <div
+              class="card p-4 rounded-lg anim-content"
+              style="--delay: 700ms"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-12 w-12 mx-auto text-pink-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
+                />
+              </svg>
+              <p class="mt-2 font-bold">Deteksi Aliran/Level</p>
+              <p class="text-sm text-gray-400">
+                Memanfaatkan efek pemanasan diri.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 10: Kesimpulan -->
+      <section class="slide flex-col justify-center" data-slide="9">
+        <div class="max-w-5xl mx-auto px-4">
+          <h2
+            class="text-4xl font-bold title-shadow text-white mb-6 anim-title"
+          >
+            Kesimpulan
+          </h2>
+          <div
+            class="card p-6 rounded-lg space-y-4 text-lg anim-content"
+            style="--delay: 200ms"
+          >
+            <p class="anim-content" style="--delay: 400ms">
+              Termistor adalah komponen serbaguna yang krusial dalam dunia
+              elektronika dan kontrol termal.
+            </p>
+            <p class="anim-content" style="--delay: 550ms">
+              <strong class="text-green-400">NTC</strong> unggul dalam
+              pengukuran suhu presisi karena sensitivitasnya yang tinggi,
+              meskipun memerlukan kompensasi non-linearitas.
+            </p>
+            <p class="anim-content" style="--delay: 700ms">
+              <strong class="text-red-400">PTC</strong> adalah pilihan ideal
+              untuk proteksi sirkuit karena kemampuannya meningkatkan resistansi
+              secara drastis pada suhu tertentu.
+            </p>
+            <p class="anim-content" style="--delay: 850ms">
+              Pemahaman mendalam tentang karakteristik keduanya memungkinkan
+              perancangan sistem yang efisien, andal, dan hemat biaya.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Navigasi -->
+    <footer
+      class="fixed bottom-0 left-0 right-0 h-[50px] flex items-center justify-center space-x-4 md:space-x-8"
+    >
+      <button
+        id="prevBtn"
+        class="btn-nav text-white font-bold p-2 rounded-full"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+      </button>
+      <div
+        id="nav-dots"
+        class="flex items-center justify-center space-x-2 md:space-x-3"
+      ></div>
+      <button
+        id="nextBtn"
+        class="btn-nav text-white font-bold p-2 rounded-full"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5l7 7-7 7"
+          />
+        </svg>
+      </button>
+      <!-- Tombol Full Screen BARU -->
+      <button
+        id="fullscreenBtn"
+        class="btn-nav text-white font-bold p-2 rounded-full"
+      >
+        <svg
+          id="fullscreen-enter-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 1v4m0 0h-4m4 0l-5-5"
+          />
+        </svg>
+        <svg
+          id="fullscreen-exit-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 hidden"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M8 4H4m0 0v4M4 4l5 5m1-1h4m0 0V4m0 4l-5-5m5 11v4m0 0h-4m4 0l-5-5m-1 1H4m0 0v-4m0 4l5-5"
+          />
+        </svg>
+      </button>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const slides = document.querySelectorAll(".slide");
+        const nextBtn = document.getElementById("nextBtn");
+        const prevBtn = document.getElementById("prevBtn");
+        const navDotsContainer = document.getElementById("nav-dots");
+        const fullscreenBtn = document.getElementById("fullscreenBtn");
+        const fullscreenEnterIcon = document.getElementById(
+          "fullscreen-enter-icon"
+        );
+        const fullscreenExitIcon = document.getElementById(
+          "fullscreen-exit-icon"
+        );
+        let currentSlide = 0;
+
+        function handleSlide1Animations() {
+          const titleEl = document.getElementById("main-title");
+          const subtitleContainer =
+            document.getElementById("subtitle-container");
+          const crackSvg = document.getElementById("crack-svg");
+          const nameContainerLeft = document.getElementById(
+            "name-container-left"
+          );
+          const nameContainerRight = document.getElementById(
+            "name-container-right"
+          );
+          const originalTitle = titleEl.dataset.value;
+          const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@#$%&";
+          let scrambleInterval = null;
+
+          // Reset state
+          nameContainerLeft.innerHTML = "";
+          nameContainerRight.innerHTML = "";
+          subtitleContainer.classList.remove("animate-fall");
+          crackSvg.classList.remove("animate-crack");
+          subtitleContainer.style.opacity = 0;
+          nameContainerLeft.style.opacity = 0;
+          nameContainerRight.style.opacity = 0;
+          titleEl.textContent = "";
+
+          function scrambleTitle() {
+            let iteration = 0;
+            clearInterval(scrambleInterval);
+            scrambleInterval = setInterval(() => {
+              titleEl.textContent = originalTitle
+                .split("")
+                .map((letter, index) => {
+                  if (index < iteration) return originalTitle[index];
+                  return chars[Math.floor(Math.random() * chars.length)];
+                })
+                .join("");
+              if (iteration >= originalTitle.length)
+                clearInterval(scrambleInterval);
+              iteration += 1 / 4;
+            }, 50);
+          }
+          function animateSubtitle() {
+            subtitleContainer.classList.add("animate-fall");
+            subtitleContainer.style.opacity = 1;
+            subtitleContainer.addEventListener(
+              "animationend",
+              () => {
+                crackSvg.classList.add("animate-crack");
+              },
+              { once: true }
+            );
+          }
+          function animateNames() {
+            const namesLeft = [
+              "Ariansyah",
+              "Juang Mangaraja Margolang",
+              "Tio Arafat",
+              "Syifa Khairi",
+              "Fahri Alfarisi",
+            ];
+            const namesRight = [
+              "Maulana Alfi Zamriza",
+              "M. Ahkmul Waliyyu",
+              "Aldi Risky",
+              "Iswandi Mabrur",
+            ];
+            nameContainerLeft.innerHTML = "";
+            nameContainerRight.innerHTML = "";
+            namesLeft.forEach((name) => {
+              const p = document.createElement("p");
+              p.className = "glitch";
+              p.setAttribute("data-text", name);
+              p.textContent = name;
+              nameContainerLeft.appendChild(p);
+            });
+            namesRight.forEach((name) => {
+              const p = document.createElement("p");
+              p.className = "glitch";
+              p.setAttribute("data-text", name);
+              p.textContent = name;
+              nameContainerRight.appendChild(p);
+            });
+            nameContainerLeft.style.opacity = 1;
+            nameContainerRight.style.opacity = 1;
+            setTimeout(() => {
+              const allNameElements = document.querySelectorAll(
+                "#name-container-left p, #name-container-right p"
+              );
+              allNameElements.forEach((el) => {
+                el.classList.remove("glitch");
+                el.classList.add("animate-fade-in");
+              });
+
+              setTimeout(() => {
+                allNameElements.forEach((p) => {
+                  p.classList.add("animate-grow");
+                  p.classList.add("lightning-text");
+                });
+              }, 500);
+            }, 1000);
+          }
+          scrambleTitle();
+          setTimeout(animateSubtitle, 1500);
+          setTimeout(animateNames, 2000);
+        }
+
+        slides.forEach((_, i) => {
+          const dot = document.createElement("button");
+          dot.classList.add(
+            "nav-dot",
+            "w-3",
+            "h-3",
+            "bg-gray-600",
+            "rounded-full"
+          );
+          dot.addEventListener("click", () => showSlide(i));
+          navDotsContainer.appendChild(dot);
+        });
+        const navDots = document.querySelectorAll(".nav-dot");
+
+        function showSlide(n) {
+          currentSlide = (n + slides.length) % slides.length;
+          slides.forEach((slide, index) => {
+            slide.classList.toggle("active", index === currentSlide);
+          });
+          navDots.forEach((dot, index) => {
+            dot.classList.toggle("active", index === currentSlide);
+          });
+
+          // Trigger animations
+          if (currentSlide === 0) {
+            handleSlide1Animations();
+          } else {
+            // Handle typing animation end
+            const typingElements =
+              slides[currentSlide].querySelectorAll(".anim-subtitle");
+            typingElements.forEach((el) => {
+              el.classList.remove("animation-end");
+              el.addEventListener(
+                "animationend",
+                () => {
+                  el.classList.add("animation-end");
+                },
+                { once: true }
+              );
+            });
+          }
+        }
+
+        nextBtn.addEventListener("click", () => showSlide(currentSlide + 1));
+        prevBtn.addEventListener("click", () => showSlide(currentSlide - 1));
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowRight") showSlide(currentSlide + 1);
+          else if (e.key === "ArrowLeft") showSlide(currentSlide - 1);
+        });
+
+        function toggleFullScreen() {
+          if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+          } else {
+            if (document.exitFullscreen) {
+              document.exitFullscreen();
+            }
+          }
+        }
+
+        fullscreenBtn.addEventListener("click", toggleFullScreen);
+
+        document.addEventListener("fullscreenchange", () => {
+          const isFullscreen = !!document.fullscreenElement;
+          fullscreenEnterIcon.classList.toggle("hidden", isFullscreen);
+          fullscreenExitIcon.classList.toggle("hidden", !isFullscreen);
+        });
+
+        showSlide(0);
+      });
+    </script>
+  </body>
+</html>
